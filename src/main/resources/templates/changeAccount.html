@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Transaction</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <style>
+        .submit {
+            cursor: pointer;
+            height: 40px;
+            width: 200px;
+            border-radius: 8px;
+            border: none;
+            background: yellow;
+        }
+
+        .title {
+            font-size: 24px;
+            line-height: normal;
+        }
+
+        .change-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+<form class="change-form" id="change_form">
+    <span class="title">Изменить Счет</span>
+    <div><label> Balance : <input type="number" name="payment" id="payment"/> </label></div>
+    <div>
+        <button type="submit" class="submit">Update</button>
+    </div>
+    <a href="/"> <- back</a>
+</form>
+<script>
+    $(document).ready(() => {
+        const path = location.pathname.split("/")
+        const id = path[path.length - 2]
+        $("#change_form").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                method: "PUT",
+                url: `/api/bankAccount/v1/accounts/${id}`,
+                contentType: "application/json",
+                dataType: "json",
+                cache: false,
+                data: JSON.stringify({
+                    "initialPayment": $('#payment').val(),
+                }),
+            }).done(()=>{
+                alert("Успешно изменино")
+                window.location.href = '/';
+            }).fail((e) => {
+                if (e.status === 200) {
+                    alert("Успешно изменино")
+                    window.location.href = '/';
+                } else {
+                    console.log(e)
+                }
+            })
+            return false;
+        });
+    })
+
+</script>
+</body>
+</html>

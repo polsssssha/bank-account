@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        .submit {
+            height: 40px;
+            width: 200px;
+            border-radius: 8px;
+            border: none;
+            background: yellow;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+<form action="/login" method="post" class="login-form">
+    <div><label> Login : <input type="text" name="username"/> </label></div>
+    <div><label> Password: <input type="password" name="password"/> </label></div>
+    <div><input type="submit" value="Login" class="submit"/></div>
+    <a href="/register">Register -></a>
+</form>
+</body>
+</html>

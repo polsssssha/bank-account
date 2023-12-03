@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts</title>
+    <link href="/index.css" rel="stylesheet" type="text/css">
+    <link href="https://raw.githubusercontent.com/tachyons-css/tachyons/master/css/tachyons.min.css" rel="stylesheet" type="text/css">
+    <style>
+        .logout{
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        .title{
+            font-size: 24px;
+            line-height: normal;
+            margin: 0;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .links{
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+<a href="/logout" class="logout">Log out</a>
+<h1 class="title">Список Счетов</h1>
+<ul id="items"></ul>
+<div class="links">
+    <a href="/add">
+        Добавить Счет ->
+    </a>
+    <a href="/transactions/month">
+        Посмотреть транзакции за месяц ->
+    </a>
+</div>
+
+</body>
+<script src="https://unpkg.com/feather-icons"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(async ()=> {
+        const items = $('#items')
+        const createItem = (json) => {
+            const item = $(`<li class="item-section">
+            <span>id: ${json.id}</span>
+            <span>Баланс: ${json.balance}</span>
+            <a href="/${json.id}/transactions">посмотреть транзакции</a>
+            <a href="/change/${json.id}">Изменить</a>
+        </li>`)
+            const deleteBtn = $(feather.icons['x'].toSvg({ class: 'plus' }))
+            item.append(deleteBtn)
+
+            deleteBtn.click(()=>{
+                $.ajax({
+                    method: "DELETE",
+                    url: `/api/bankAccount/v1/accounts/${json.id}`,
+                    contentType:"application/json",
+                    dataType:"json",
+                    cache: false,
+                }).done(()=>{
+                    item.remove()
+                }).fail((e)=>{
+                    console.log(e)
+                })
+            })
+            return item;
+        }
+        $.ajax({
+            method: "GET",
+            url: "/api/bankAccount/v1/accounts",
+            contentType:"application/json",
+            dataType:"json",
+            cache: false,
+        }).done(value=>{
+            console.log(value)
+            if(value && value.length){
+                value.forEach(x=>{
+                    items.append(createItem(x))
+                })
+            }
+        })
+    })
+</script>
+</html>

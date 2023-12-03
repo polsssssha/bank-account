@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Transaction</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <style>
+        .submit {
+            cursor: pointer;
+            height: 40px;
+            width: 200px;
+            border-radius: 8px;
+            border: none;
+            background: yellow;
+        }
+
+        .title {
+            font-size: 24px;
+            line-height: normal;
+        }
+
+        .add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+<form class="add-form" id="add_form">
+    <span class="title">Добавить транзакцию</span>
+    <div><label> Balance : <input type="number" name="payment" id="payment"/> </label></div>
+    <div><label> Comment : <input type="text" name="comment" id="comment"/> </label></div>
+    <div>
+        <button type="submit" class="submit">Create</button>
+    </div>
+    <a href="#" id="back"> <- back</a>
+</form>
+<script>
+    $(document).ready(() => {
+        $("#back").click(()=>{
+            window.history.back()
+        })
+        const path = location.pathname.split("/")
+        const id = path[path.length - 3]
+        console.log(path)
+        $("#add_form").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                method: "POST",
+                url: `/api/bankAccount/v1/accounts/${id}/transactions`,
+                contentType: "application/json",
+                dataType: "json",
+                cache: false,
+                data: JSON.stringify({
+                    "payment": $('#payment').val(),
+                    "comment": $('#comment').val(),
+                }),
+            }).fail((e) => {
+                if(e.status === 201){
+                    alert("Успешно добавлено")
+                }else{
+                    console.log(e)
+                }
+            })
+            return false;
+        });
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Register</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <style>
+        .submit {
+            cursor: pointer;
+            height: 40px;
+            width: 200px;
+            border-radius: 8px;
+            border: none;
+            background: yellow;
+        }
+
+        .title {
+            font-size: 24px;
+            line-height: normal;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+<form class="login-form" id="register_form">
+    <span class="title">Add new user</span>
+    <div><label> Login : <input type="text" name="username" id="username"/> </label></div>
+    <div><label> Password: <input type="password" name="password" id="password"/> </label></div>
+    <div>
+        <button type="submit" class="submit">Register</button>
+    </div>
+    <a href="/login"> <- Login</a>
+</form>
+</body>
+<script>
+    $(document).ready(() => {
+        $("#register_form").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                method: "POST",
+                url: `/api/bankAccount/v1/users`,
+                contentType: "application/json",
+                dataType: "json",
+                cache: false,
+                data: JSON.stringify({
+                    "username": $('#username').val(),
+                    "password": $('#password').val()
+                }),
+            }).fail((e) => {
+                if(e.status === 201){
+                    window.location.href = '/login';
+                }else{
+                    console.log(e)
+                }
+            })
+            return false;
+        });
+    })
+
+</script>
+</html>
