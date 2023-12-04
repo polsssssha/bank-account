@@ -16,7 +16,7 @@ public class Account {
     private Long id;
     @Column(name = "balance", nullable = false)
     private Long balance;
-    @OneToMany(cascade = CascadeType.REFRESH)
+    @OneToMany(cascade = CascadeType.REMOVE)
     @Column(name = "transactions", nullable = false)
     private List<Transaction> transactions = new ArrayList<>();
     @OneToOne(cascade = CascadeType.REFRESH)

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -85,12 +86,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         try {
-            var account = service.getAccount(id);
-            var transactions = account.getTransactions();
             service.deleteAccount(id);
-            if(transactions != null){
-                transactions.forEach(x -> transactionService.deleteTransaction(x.getId()));
-            }
             return ResponseEntity.noContent().build();
         } catch (Exception ex) {
             return ResponseEntity.notFound().build();
